@@ -35,15 +35,22 @@ public class Utils {
             return;
         }
 
+        Log.d(TAG, context.getClassLoader().getClass().getSimpleName());
+
         // getCodeCacheDir() 方法在 API 21 才能使用,实际测试替换成 getExternalCacheDir() 等也是可以的
         // 只要有读写权限的路径均可
         DexClassLoader dexClassLoader =
-                new DexClassLoader(jarFile.getAbsolutePath(), context.getExternalCacheDir().getAbsolutePath(), null, context.getClassLoader());
+                new DexClassLoader(jarFile.getAbsolutePath(),
+                        context.getExternalCacheDir().getAbsolutePath(),
+                        null,
+                        context.getClassLoader());
 
         Log.d(TAG, "testHotFix cacheDir = " + context.getExternalCacheDir().getAbsolutePath());
         try {
             // 加载 HelloJava 类
-            Class clazz = dexClassLoader.loadClass("luck.luck.ryan.HelloJava");
+            Class clazz = dexClassLoader.loadClass("luck.ryan.HelloJava");
+            Log.d(TAG, "dex parent name = " +
+                    "" + dexClassLoader.getParent().getClass().getSimpleName());
             // 强转成 ISayHello, 注意 ISayHello 的包名需要和 jar 包中的一致
             ISayHello iSayHello = (ISayHello) clazz.newInstance();
             Log.d(TAG, "testHotFix = " + iSayHello.say());
