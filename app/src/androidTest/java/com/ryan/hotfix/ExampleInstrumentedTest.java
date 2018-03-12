@@ -3,11 +3,11 @@ package com.ryan.hotfix;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
+import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.junit.Assert.*;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -21,6 +21,19 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.luck.ryan.hotfix", appContext.getPackageName());
+        JSONObject jsonObject = new JSONObject("{\"name\":\"ryan\"}");
+        String result = jsonObject.getString("name");
+        Log.d("ExampleInstrumentedTest", "result1 = " + result);
+        result = jsonObject.optString("name");
+        Log.d("ExampleInstrumentedTest", "result2 = " + result);
+        try {
+            result = jsonObject.getString("jj");
+            Log.d("ExampleInstrumentedTest", "result3 = " + result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        result = jsonObject.optString("jj");
+        Log.d("ExampleInstrumentedTest", "result4 = " + result);
+
     }
 }

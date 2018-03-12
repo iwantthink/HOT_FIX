@@ -19,6 +19,8 @@ public class App extends Application {
                         getExternalStorageDirectory().getPath()
                         + File.separator + "HMT_TEST");
 
-        FixDexUtil.loadFixedDex(this, jarFile);
+//        FixDexUtil.loadFixedDex(this, jarFile);
+
+        Utils.testHotFix(this);
     }
 }
