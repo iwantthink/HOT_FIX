@@ -3,9 +3,7 @@ package com.ryan.hotfix;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
-import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -21,19 +19,26 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        JSONObject jsonObject = new JSONObject("{\"name\":\"ryan\"}");
-        String result = jsonObject.getString("name");
-        Log.d("ExampleInstrumentedTest", "result1 = " + result);
-        result = jsonObject.optString("name");
-        Log.d("ExampleInstrumentedTest", "result2 = " + result);
-        try {
-            result = jsonObject.getString("jj");
-            Log.d("ExampleInstrumentedTest", "result3 = " + result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        result = jsonObject.optString("jj");
-        Log.d("ExampleInstrumentedTest", "result4 = " + result);
-
+//        final SecureRandom random = new SecureRandom();
+//        String key = "key";
+//        int per = 10000000;
+//        int j = 0;
+//        for (int i = 0; i < 10000; i++) {
+//            final String randomDeviceId = new BigInteger(64, random).toString(16);
+////            Log.d("ExampleInstrumentedTest", "randomDeviceId" + randomDeviceId);
+//            int hash = (key + randomDeviceId).hashCode();
+////            Log.d("ExampleInstrumentedTest", "hash:" + hash);
+//            hash = Math.abs(hash);
+//            int curper = hash % per;
+////            Log.d("ExampleInstrumentedTest", "curper:" + curper);
+//            boolean inside = curper > 5000000 && curper < 6000000;
+////            Log.d("ExampleInstrumentedTest", "inside:" + inside);
+//            if (inside) {
+//                j++;
+//            }
+//        }
+//
+//        Log.d("ExampleInstrumentedTest", "success times:" + j);
     }
+
 }

@@ -12,9 +12,14 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Log.d("MainActivity", "msg = " + new HelloJava().say());
+
+        getName("abcdeg");
     }
 
+
+    public void getName(String name) {
+        Log.d("MainActivity", name);
+    }
 
 }
