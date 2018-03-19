@@ -5,6 +5,7 @@ package luck.ryan;
  */
 
 public class HelloJava implements ISayHello {
+
     @Override
     public String say() {
         return "i am hello  from original apk";

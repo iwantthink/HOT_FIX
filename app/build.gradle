@@ -1,6 +1,17 @@
 apply plugin: 'com.android.application'
+//制作补丁时将这个打开，auto-patch-plugin紧跟着com.android.application
+apply plugin: 'auto-patch-plugin'
+//apply plugin: 'robust'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias '123456'
+            keyPassword '123456'
+            storeFile file('E:/github/HOT_FIX/hotfix.jks')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.luck.ryan.hotfix"
@@ -12,19 +23,21 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:0.5'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    implementation 'com.meituan.robust:robust:0.4.78'
 }
 
 
@@ -37,6 +50,6 @@ task makeJar(type: org.gradle.api.tasks.bundling.Jar) {
     into "/"
 
     exclude {
-        it.path.contains('com.ryan')||it.path.contains('android')
+        it.path.contains('com.ryan') || it.path.contains('android')
     }
 }
