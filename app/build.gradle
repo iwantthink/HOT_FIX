@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
 //制作补丁时将这个打开，auto-patch-plugin紧跟着com.android.application
-apply plugin: 'auto-patch-plugin'
+//apply plugin: 'auto-patch-plugin'
 //apply plugin: 'robust'
+//apply from:'other.gradle'
+apply plugin: 'com.ryan.log'
 
 android {
     signingConfigs {
@@ -53,3 +55,9 @@ task makeJar(type: org.gradle.api.tasks.bundling.Jar) {
         it.path.contains('com.ryan') || it.path.contains('android')
     }
 }
+
+//println '------------------'
+//println 'this is executed in configuration'
+//println "gradle hashcode = ${gradle.hashCode()}"
+//println "project  = ${project.hashCode()}"
+//println '------------------'

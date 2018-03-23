@@ -1,0 +1,8 @@
+class GreetingPlugin implements Plugin<Project> {
+    void apply(Project project) {
+        println "============="
+        println "project: ${project.name}"
+    }
+}
+
+apply plugin:GreetingPlugin

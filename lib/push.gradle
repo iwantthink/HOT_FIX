@@ -1,0 +1,13 @@
+apply plugin: 'maven'
+
+group 'com.ryan.log'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+            pom.version = '1.0.3'
+            pom.artifactId = "Log"
+        }
+    }
+}

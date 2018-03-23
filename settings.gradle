@@ -1,1 +1,20 @@
-include ':app'
+include ':app', ':lib'
+
+//println '------------------'
+//println 'this is executed in initialize'
+//println "gradle hashcode = ${gradle.hashCode()}"
+////println "project  = ${project.hashCode()}"
+//println '------------------'
+//
+//gradle.beforeProject {
+//    println '---------beforeProject---------'
+//}
+//
+//gradle.taskGraph.whenReady {
+//    println '----------whenReady------------'
+//}
+//
+//gradle.buildFinished {
+//
+//    println '----------buildFinished --------------'
+//}
