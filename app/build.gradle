@@ -4,6 +4,15 @@ apply plugin: 'com.android.application'
 //apply plugin: 'robust'
 //apply from:'other.gradle'
 apply plugin: 'com.ryan.log'
+project.apply()
+
+//Person{
+//    lastName 'Ma'
+//    age 18
+//}
+
+Person.lastName = 'Ma'
+Person.age = 11
 
 android {
     signingConfigs {
@@ -61,3 +70,4 @@ task makeJar(type: org.gradle.api.tasks.bundling.Jar) {
 //println "gradle hashcode = ${gradle.hashCode()}"
 //println "project  = ${project.hashCode()}"
 //println '------------------'
+

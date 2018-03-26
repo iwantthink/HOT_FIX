@@ -6,7 +6,7 @@ uploadArchives {
     repositories {
         mavenDeployer {
             repository(url: uri('../repo'))
-            pom.version = '1.0.3'
+            pom.version = '1.0.4'
             pom.artifactId = "Log"
         }
     }
