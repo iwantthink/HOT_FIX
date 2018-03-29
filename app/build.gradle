@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 //apply plugin: 'auto-patch-plugin'
 //apply plugin: 'robust'
 //apply from:'other.gradle'
-//apply plugin: 'com.ryan.log'
+apply plugin: 'com.ryan.log'
 
-//LogConfig {
-//    includeClass 'com.ryan.hotfix.MainActivity'
-//}
+LogConfig {
+    includeClass 'com.ryan.hotfix.MainActivity'
+}
 
 android {
     signingConfigs {
@@ -60,16 +60,22 @@ task makeJar(type: org.gradle.api.tasks.bundling.Jar) {
     }
 }
 
-task copy() {
-    File srcFile = file("E:\\github\\HOT_FIX\\app\\build.gradle")
-    File dstFile = file("E:\\github\\HOT_FIX\\app\\build-2.gradle")
-    srcFile.withInputStream { input ->
-        dstFile.withOutputStream { output ->
-            output << input
-        }
-    }
-
+task testWhat(){
 }
+
+//task copy() {
+//    File srcFile = file("E:\\github\\HOT_FIX\\app\\build.gradle")
+//    File dstFile = file("E:\\github\\HOT_FIX\\app\\build_2.gradle")
+//
+//    srcFile.withInputStream { input ->
+//        dstFile.withOutputStream { output ->
+//            output << input
+//        }
+//    }
+//
+//    dstFile.renameTo("app\\build_3.gradle")
+//
+//}
 
 //println '------------------'
 //println 'this is executed in configuration'

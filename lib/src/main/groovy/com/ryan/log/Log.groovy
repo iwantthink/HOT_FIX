@@ -27,7 +27,7 @@ class Log implements Plugin<Project> {
         if (hasPlugin) {
             AppExtension app = project.extensions.findByName('android')
             if (!app) {
-                println("app==null")
+                println("AppExtension is null")
                 return
             }
             app.registerTransform(new MyTransform(project, logConfig))

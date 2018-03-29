@@ -43,7 +43,6 @@ class MyTransform extends Transform {
     @Override
     void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
         super.transform(transformInvocation)
-
         println("transform was executed")
         Collection<TransformInput> inputs = transformInvocation.inputs
         TransformOutputProvider outputProvider = transformInvocation.outputProvider
@@ -57,6 +56,13 @@ class MyTransform extends Transform {
                             it.scopes,
                             Format.DIRECTORY)
                     File inputDir = it.file
+                    println "outputDir = $outputDir.absolutePath"
+                    println "inputDIr = $inputDir.absolutePath"
+
+                    File jarFile = outputProvider.getContentLocation("main", getOutputTypes(), getScopes(),
+                            Format.JAR)
+                    println "jarFile = $jarFile.absolutePath"
+
                     FileUtils.copyDirectory(inputDir, outputDir)
 
 
@@ -66,13 +72,17 @@ class MyTransform extends Transform {
                             boolean result = checkNeedModify(original)
                             println "file: $original.name need modify  = $result"
                             if (result) {
-                                File modifiedFile = modifyClass(original)
-                                modifiedFile.withInputStream { input ->
-                                    original.withOutputStream { output ->
-                                        output << input
-                                    }
-                                }
-
+                                modifyClass(original)
+//                                String originalName = modifiedFile.name
+//                                String originalPath = modifiedFile.absolutePath
+//                                File dstFile = new File(modifiedFile.
+//                                        absolutePath.
+//                                        replace(originalName, originalName + "_x"))
+//                                modifiedFile.withInputStream { input ->
+//                                    dstFile.withOutputStream { output ->
+//                                        output << input
+//                                    }
+//                                }
                             }
                         }
                     }
@@ -83,20 +93,13 @@ class MyTransform extends Transform {
                 }
 
                 it.jarInputs.each {
-//                    println "-----jarInputs begin-----"
                     File outputJar = outputProvider.getContentLocation(
                             it.name,
                             it.contentTypes,
                             it.scopes,
                             Format.JAR)
-//                    println "JAR = " + outputJar.absolutePath
-//                    println "JAR = " + it.name
-//                    println "JAR = " + it.contentTypes.toString()
-//                    println "JAR = " + it.scopes.toString()
                     File inputJar = it.file
-//                    println("JarInput = " + inputJar.absolutePath)
                     FileUtils.copyFile(inputJar, outputJar)
-//                    println(" ")
 
                 }
             }
@@ -119,10 +122,8 @@ class MyTransform extends Transform {
         }
     }
 
-    File modifyClass(File file) {
+    void modifyClass(File file) {
         println("=====modifyClass=====")
-        return file
-
     }
 
     boolean checkNeedModify(File inputDir) {
