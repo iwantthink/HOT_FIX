@@ -4,6 +4,8 @@ import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
 import org.apache.commons.io.FileUtils
 import org.gradle.api.Project
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.Opcodes
 
 class MyTransform extends Transform {
 
@@ -62,9 +64,7 @@ class MyTransform extends Transform {
                     File jarFile = outputProvider.getContentLocation("main", getOutputTypes(), getScopes(),
                             Format.JAR)
                     println "jarFile = $jarFile.absolutePath"
-
                     FileUtils.copyDirectory(inputDir, outputDir)
-
 
                     outputDir.traverse { original ->
                         if (original.isFile()) {
@@ -124,20 +124,32 @@ class MyTransform extends Transform {
 
     void modifyClass(File file) {
         println("=====modifyClass=====")
+        ClassReader classReader = new ClassReader(file.newInputStream())
+        ClassPrinter classPrinter = new ClassPrinter(Opcodes.ASM5)
+        classReader.accept(classPrinter, ClassReader.SKIP_DEBUG)
     }
 
-    boolean checkNeedModify(File inputDir) {
+    boolean checkNeedModify(File inputFile) {
         boolean isNeed = false
         if (mConfig.includeClass) {
             String[] clazz = mConfig.includeClass
             clazz.each {
-                if (inputDir.absolutePath.contains(it.replace(".", "\\"))) {
+//                if (inputDir.absolutePath.contains(
+//                        it.replace(".", "\\"))) {
+//                    isNeed = true
+//                }
+                println "canonicalPath = " + inputFile.canonicalPath
+                println "inputFile name = " + inputFile.getName().replace(".class", "")
+                println "it = $it"
+                if (inputFile.getName().replace(".class", "").equals(it)) {
                     isNeed = true
                 }
+
             }
         } else if (mConfig.includePkg) {
             String pkg = mConfig.includePkg;
-            if (inputDir.absolutePath.contains(pkg.replace(".", "\\"))) {
+            if (inputFile.absolutePath.contains(
+                    pkg.replace(".", "\\"))) {
                 isNeed = true
             }
         }
