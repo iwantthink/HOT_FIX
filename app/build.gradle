@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 //制作补丁时将这个打开，auto-patch-plugin紧跟着com.android.application
 //apply plugin: 'auto-patch-plugin'
 //apply plugin: 'robust'
-//apply from:'other.gradle'
-apply plugin: 'com.ryan.log'
+
+apply plugin: com.ryan.log.Log
 
 LogConfig {
     includeClass 'com.ryan.hotfix.MainActivity'
@@ -44,6 +44,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:0.5'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
     implementation 'com.meituan.robust:robust:0.4.78'
+
+
 }
 
 

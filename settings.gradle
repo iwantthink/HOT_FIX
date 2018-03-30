@@ -1,4 +1,4 @@
-include ':app', ':lib'
+include ':app', ':lib', 'buildSrc'
 
 //println '------------------'
 //println 'this is executed in initialize'
