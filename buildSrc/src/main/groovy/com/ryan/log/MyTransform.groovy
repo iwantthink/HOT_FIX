@@ -69,9 +69,9 @@ class MyTransform extends Transform {
                     outputDir.traverse { original ->
                         if (original.isFile()) {
                             println("child file = $original.absolutePath")
-                            boolean result = checkNeedModify(original)
+                            boolean needModify = checkNeedModify(original)
                             println "file: $original.name need modify  = $result"
-                            if (result) {
+                            if (needModify) {
                                 modifyClass(original)
 //                                String originalName = modifiedFile.name
 //                                String originalPath = modifiedFile.absolutePath
@@ -141,7 +141,12 @@ class MyTransform extends Transform {
                 println "canonicalPath = " + inputFile.canonicalPath
                 println "inputFile name = " + inputFile.getName().replace(".class", "")
                 println "it = $it"
-                if (inputFile.getName().replace(".class", "").equals(it)) {
+
+                def clazzNeedChanged = it.replace(".", "\\");
+                println "clazzNeedChanged = $clazzNeedChanged"
+                if (inputFile != null &&
+                        inputFile.name != null &&
+                        inputFile.getName().equals(clazzNeedChanged)) {
                     isNeed = true
                 }
 
