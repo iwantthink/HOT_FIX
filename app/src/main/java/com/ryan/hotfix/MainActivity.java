@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mTvTitle = findViewById(R.id.tv_title);
+
     }
 
     @Modify
