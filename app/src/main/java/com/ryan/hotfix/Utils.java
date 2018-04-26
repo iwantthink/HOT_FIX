@@ -1,10 +1,12 @@
 package com.ryan.hotfix;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.util.HashMap;
 
 import dalvik.system.DexClassLoader;
 import luck.ryan.ISayHello;
@@ -61,6 +63,66 @@ public class Utils {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-
     }
+
+    HashMap<String, LoadedResource> mResources = new HashMap<>();
+
+    public LoadedResource getInstalledResource(Context parentContext, String packageName) {
+        LoadedResource resource = mResources.get(packageName);  // 先从缓存中取, 没有就去加载
+        if (resource == null) {
+            try {
+                /**
+                 * 根据包名获取到已安装应用的Context
+                 */
+                Context context = parentContext.createPackageContext(packageName,
+                        Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
+                resource = new LoadedResource();
+                resource.packageName = packageName;
+                resource.resources = context.getResources();
+                resource.classLoader = context.getClassLoader();
+                mResources.put(packageName, resource);  // 得到结果缓存起来
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return resource;
+    }
+
+    /**
+     * 获取资源ID
+     *
+     * @param packageName 包名
+     * @param type        对应的资源类型, drawable mipmap等
+     * @param fieldName
+     * @return
+     */
+    public int getResourceID(Context context, String packageName, String type, String fieldName) {
+
+        int resID = 0;
+        // 获取已安装APK的资源
+        LoadedResource installedResource = getInstalledResource(context, packageName);
+        if (installedResource != null) {
+            // 根据匿名内部类的命名, 拼写出R文件的包名+类名
+            String rClassName = packageName + ".R$" + type;
+            try {
+                //  加载R文件
+                Class cls = installedResource.classLoader.loadClass(rClassName);
+                //  反射获取R文件对应资源名的ID
+                resID = (Integer) cls.getField(fieldName).get(null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.w(TAG, "resource is null:" + packageName);
+        }
+        return resID;
+    }
+
+    public class LoadedResource {
+        public Resources resources;
+        public String packageName;
+        public ClassLoader classLoader;
+    }
+
+
 }
