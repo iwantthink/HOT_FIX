@@ -6,8 +6,11 @@ package luck.ryan;
 
 public class HelloJava implements ISayHello {
 
+    Test mTest = new Test();
+
     @Override
     public String say() {
-        return "i am hello  from original apk";
+        mTest.test();
+        return "i am hello  from original apk version 222";
     }
 }

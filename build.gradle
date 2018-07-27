@@ -29,9 +29,6 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
 
 //println '------------------'
 //println 'this is executed in configuration'

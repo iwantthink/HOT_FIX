@@ -6,7 +6,7 @@ apply plugin: 'com.android.application'
 apply plugin: com.ryan.log.Log
 
 LogConfig {
-    includeClass 'com.ryan.hotfix.MainActivity'
+    includeClass 'com.ryan.hotfix.SampleActivity'
 }
 
 android {
@@ -20,7 +20,7 @@ android {
     }
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.luck.ryan.hotfix"
+        applicationId "com.ryan.hotfix"
         minSdkVersion 19
         targetSdkVersion 21
         versionCode 1
@@ -62,7 +62,7 @@ task makeJar(type: org.gradle.api.tasks.bundling.Jar) {
     }
 }
 
-task testWhat(){
+task testWhat() {
 }
 
 //task copy() {

@@ -5,6 +5,7 @@ import com.android.build.gradle.internal.pipeline.TransformManager
 import org.apache.commons.io.FileUtils
 import org.gradle.api.Project
 import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Opcodes
 
 class MyTransform extends Transform {
@@ -30,6 +31,7 @@ class MyTransform extends Transform {
     @Override
     Set<? super QualifiedContent.Scope> getScopes() {
         return TransformManager.SCOPE_FULL_PROJECT
+//        return TransformManager.PROJECT_ONLY
     }
 
     @Override
@@ -45,59 +47,64 @@ class MyTransform extends Transform {
     @Override
     void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
         super.transform(transformInvocation)
-        println("transform was executed")
+        println("executing transform start")
+        //输入
         Collection<TransformInput> inputs = transformInvocation.inputs
+        //输出
         TransformOutputProvider outputProvider = transformInvocation.outputProvider
         if (inputs) {
-            inputs.each {
-                it.directoryInputs.each {
-                    println "-----directoryInputs begin-----"
+            inputs.each { TransformInput input ->
+                input.directoryInputs.each { DirectoryInput dirInput ->
+                    println "---------------------"
+                    println "directoryInputs begin"
+                    println "---------------------"
+                    //输出目录
                     File outputDir = outputProvider.getContentLocation(
-                            it.name,
-                            it.contentTypes,
-                            it.scopes,
+                            dirInput.name,
+                            dirInput.contentTypes,
+                            dirInput.scopes,
                             Format.DIRECTORY)
-                    File inputDir = it.file
+                    //输入目录
+                    File inputDir = dirInput.file
                     println "outputDir = $outputDir.absolutePath"
                     println "inputDIr = $inputDir.absolutePath"
-
-                    File jarFile = outputProvider.getContentLocation("main", getOutputTypes(), getScopes(),
-                            Format.JAR)
-                    println "jarFile = $jarFile.absolutePath"
+                    //复制文件...作为下一个transform的输入
                     FileUtils.copyDirectory(inputDir, outputDir)
-
+                    //遍历当前transform下的文件,做AOP操作
                     outputDir.traverse { original ->
                         if (original.isFile()) {
-                            println("child file = $original.absolutePath")
+//                            println ""
+//                            println("child file = $original.absolutePath")
+//                            println ""
+
                             boolean needModify = checkNeedModify(original)
-                            println "file: $original.name need modify  = $result"
+                            if (needModify) {
+                                println ":::::::::::::::::::::::::::::"
+                                println "File: ${original.name} need modify  = ${needModify}"
+                                println ":::::::::::::::::::::::::::::"
+                            }
+
                             if (needModify) {
                                 modifyClass(original)
-//                                String originalName = modifiedFile.name
-//                                String originalPath = modifiedFile.absolutePath
-//                                File dstFile = new File(modifiedFile.
-//                                        absolutePath.
-//                                        replace(originalName, originalName + "_x"))
-//                                modifiedFile.withInputStream { input ->
-//                                    dstFile.withOutputStream { output ->
-//                                        output << input
-//                                    }
-//                                }
                             }
                         }
                     }
-
-                    println "-----directoryInputs end-----"
-                    println(" ")
+                    println "---------------------"
+                    println "directoryInputs   end"
+                    println "---------------------"
 
                 }
 
-                it.jarInputs.each {
+                input.jarInputs.each {
                     File outputJar = outputProvider.getContentLocation(
                             it.name,
                             it.contentTypes,
                             it.scopes,
                             Format.JAR)
+//                    println("Jarinput path = ${it.toString()}")
+//                    println("Jarinput name = ${it.name}")
+//                    println("outputJar name = ${outputJar.name}")
+
                     File inputJar = it.file
                     FileUtils.copyFile(inputJar, outputJar)
 
@@ -120,13 +127,45 @@ class MyTransform extends Transform {
         if (secondaryInputs) {
             println("secondaryInputs != null")
         }
+        println "executing transform end"
     }
 
     void modifyClass(File file) {
-        println("=====modifyClass=====")
-        ClassReader classReader = new ClassReader(file.newInputStream())
-        ClassPrinter classPrinter = new ClassPrinter(Opcodes.ASM5)
-        classReader.accept(classPrinter, ClassReader.SKIP_DEBUG)
+        println("=====modifyClass start=====")
+        println("=====modifyClass start=====")
+        println("=====modifyClass start=====")
+
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS)
+
+        ClassPrinter cp = new ClassPrinter(Opcodes.ASM5, cw)
+
+        ClassReader cr = new ClassReader(file.newInputStream())
+
+        cr.accept(cp, ClassReader.EXPAND_FRAMES)
+
+        byte[] b2 = cw.toByteArray()
+
+        println "output byte array's length = ${b2.length}"
+
+        if (file.exists()) {
+            file.delete()
+        }
+
+        file.createNewFile()
+
+
+        BufferedOutputStream bos =  file.newOutputStream()
+
+        bos.write(b2)
+
+        bos.flush()
+
+        bos.close()
+
+        println("=====modifyClass end=====")
+        println("=====modifyClass end=====")
+        println("=====modifyClass end=====")
+
     }
 
     boolean checkNeedModify(File inputFile) {
@@ -138,15 +177,20 @@ class MyTransform extends Transform {
 //                        it.replace(".", "\\"))) {
 //                    isNeed = true
 //                }
-                println "canonicalPath = " + inputFile.canonicalPath
-                println "inputFile name = " + inputFile.getName().replace(".class", "")
-                println "it = $it"
 
-                def clazzNeedChanged = it.replace(".", "\\");
-                println "clazzNeedChanged = $clazzNeedChanged"
+
+                String clazzNeedChanged = it.replace(".", "\\")
+
                 if (inputFile != null &&
                         inputFile.name != null &&
-                        inputFile.getName().equals(clazzNeedChanged)) {
+                        inputFile.canonicalPath.contains(clazzNeedChanged )) {
+
+                    println "当前进行转换的类的路径 = " + inputFile.canonicalPath
+                    println "当前类的名称 ${inputFile.name}"
+                    println "当前类的名称,去除.class = " + inputFile.getName().replace(".class", "")
+                    println "需要进行转换的类 = $it"
+                    println "需要进行转换的类,内部名称 = $clazzNeedChanged"
+
                     isNeed = true
                 }
 
@@ -158,6 +202,7 @@ class MyTransform extends Transform {
                 isNeed = true
             }
         }
+
         return isNeed
     }
 

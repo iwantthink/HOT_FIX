@@ -19,8 +19,8 @@
         android:id="@+id/btn_load"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="加载补丁"
         android:onClick="load"
+        android:text="开启页面"
         />
 
     <Button
@@ -28,9 +28,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/btn_load"
-        android:text="执行方法"
         android:onClick="add"
+        android:text="执行HOOK"
         />
+
+    <Button
+        android:id="@+id/btn_sample"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="sample"
+        android:text="跳转至Sample"/>
 
 
 </RelativeLayout>

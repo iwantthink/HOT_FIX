@@ -2,6 +2,7 @@ package com.ryan.log
 
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.AppPlugin
+import com.android.build.gradle.internal.pipeline.TransformManager
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -22,7 +23,7 @@ public class Log implements Plugin<Project> {
             }
         }
 
-        def hasPlugin = project.plugins.hasPlugin(AppPlugin)
+        boolean hasPlugin = project.plugins.hasPlugin(AppPlugin)
 
         if (hasPlugin) {
             AppExtension app = project.extensions.findByName('android')
@@ -30,6 +31,7 @@ public class Log implements Plugin<Project> {
                 println("AppExtension is null")
                 return
             }
+            TransformManager
             app.registerTransform(new MyTransform(project, logConfig))
 
         }
