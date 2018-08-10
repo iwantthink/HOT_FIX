@@ -16,6 +16,7 @@ import android.os.Message;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,10 +40,10 @@ import java.util.List;
 
 import dalvik.system.DexClassLoader;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     private Context mContext;
-
+    private Button mBtnGo2Sample;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,17 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         mTvTitle = findViewById(R.id.tv_title);
         mContext = MainActivity.this;
+        mBtnGo2Sample = findViewById(R.id.btn_sample);
+
+        mBtnGo2Sample.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(MainActivity.this, SampleActivity.class));
+        finish();
+
     }
 
 
@@ -57,10 +69,6 @@ public class MainActivity extends Activity {
     public String getName(String name) {
         Log.d("MainActivity", "bbb =" + name);
         return "bbb =" + name;
-    }
-
-    public void sample(View v) {
-            startActivity(new Intent(MainActivity.this,SampleActivity.class));
     }
 
 
@@ -625,4 +633,6 @@ public class MainActivity extends Activity {
         System.arraycopy(arrayRhs, 0, result, i, j);
         return result;
     }
+
+
 }

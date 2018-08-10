@@ -36,7 +36,6 @@
         android:id="@+id/btn_sample"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="sample"
         android:text="跳转至Sample"/>
 
 

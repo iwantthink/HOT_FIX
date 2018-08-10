@@ -3,10 +3,12 @@ apply plugin: 'com.android.application'
 //apply plugin: 'auto-patch-plugin'
 //apply plugin: 'robust'
 
-apply plugin: com.ryan.log.Log
+apply plugin: com.ryan.log.HMTPlugin
 
-LogConfig {
-    includeClass 'com.ryan.hotfix.SampleActivity'
+HMTConfig {
+    includePkg = ['com.ryan.hotfix']
+
+    excludeClass = ["com.ryan.hotfix.DexUtils"]
 }
 
 android {
@@ -60,9 +62,6 @@ task makeJar(type: org.gradle.api.tasks.bundling.Jar) {
     exclude {
         it.path.contains('com.ryan') || it.path.contains('android')
     }
-}
-
-task testWhat() {
 }
 
 //task copy() {

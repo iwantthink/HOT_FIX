@@ -1,6 +1,7 @@
 package com.ryan.hotfix;
 
 import android.app.Application;
+import android.content.Context;
 
 /**
  * Created by renbo on 2018/3/9.
@@ -8,9 +9,14 @@ import android.app.Application;
 
 public class App extends Application {
 
+    public static Context sContext;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        sContext = getApplicationContext();
 //        final File jarFile =
 //                new File(Environment.
 //                        getExternalStorageDirectory().getPath()
